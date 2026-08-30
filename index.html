@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KOPWASM - Synth</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+</head>
+<body>
+
+  <div class="synth-container">
+    
+    <!-- TOP ROW: LEFT & RIGHT PANELS -->
+    <div class="synth-main-row">
+      
+      <!-- LEFT PANEL -->
+      <div class="left-panel">
+        <div class="header-block">
+          
+      <!-- TTITLE & ON/OFF TEXT -->
+          <div class="brand-box">
+            <span class="brand-title">KOPWASM</span>
+              <div class="power-wrapper">
+                <span class="power-text">OFF</span>
+                  <label class="toggle-switch">
+                  <input type="checkbox" id="power-toggle">
+                  <span class="switch-slider"></span>
+                </label>
+                <span class="power-text">ON</span>
+              </div>
+          </div>
+          
+       <!-- SEARCH BOX, TEXT & ARROW --> 
+          <div class="power-search-row">
+            <div class="search-box">
+              <input type="text" id="city-input" placeholder="Search city..." disabled />
+              <button id="btn-search" disabled>></button>
+            </div>
+          </div>
+          
+       <!-- MASTER VOLUME TEXT & SLIDER --> 
+          <div class="master-vol-box">
+            <span class="master-label">MASTER VOLUME</span>
+            <input type="range" id="master-slider" min="0" max="1" step="0.01" value="0.8" disabled />
+          </div>
+          
+       <!-- RECORD & EXPORT BUTTON --> 
+          <div id="export-container" style="text-align: center; margin: 15px 0;">
+            <button id="export-btn" style="padding: 10px 20px; font-weight: bold; cursor: pointer;">
+              Record & Export 30s Audio
+            </button>
+             <span id="export-status" style="margin-left: 10px; font-family: monospace;"></span>
+          </div>
+        </div>
+
+<div class="preset-section">
+  <!-- LHS COLUMN - KOPPEN CLASS PRESETS -->
+  <div class="koppen-col">
+    <button class="btn-preset" data-preset="tropical">TROPICAL</button>
+    <button class="btn-preset" data-preset="temperate">TEMPERATE</button>
+    <button class="btn-preset" data-preset="arid">ARID</button>
+    <button class="btn-preset" data-preset="continental">CONTINENTAL</button>
+    <button class="btn-preset" data-preset="polar">POLAR</button>
+    <button class="btn-preset" data-preset="alpine">ALPINE</button>
+  </div>
+
+  <!-- RHS COLUMN - FAVS & RANDOM -->
+  <div class="fav-col">
+    <button class="btn-preset btn-fav" data-slot="1" disabled>FAV 1</button>
+    <button class="btn-preset btn-fav" data-slot="2" disabled>FAV 2</button>
+    <button class="btn-preset btn-fav" data-slot="3" disabled>FAV 3</button>
+    <button class="btn-preset btn-fav" data-slot="4" disabled>FAV 4</button>
+    <button class="btn-preset btn-fav" data-slot="5" disabled>FAV 5</button>
+    <button class="btn-preset" id="btn-random" disabled>RANDOM</button>
+  </div>
+</div>
+      </div>
+      <!-- END OF LEFT PANEL -->
+      
+      <!-- RIGHT PANEL -->
+        <!-- WEATHER ATTRIBUTE SLIDERS -->
+      <div class="right-panel">
+        <div class="controls-grid">
+          <div class="channel-block">
+            <span class="channel-title">SUN</span>
+            <div class="slider-row"><span class="param-label label-int">INTENSITY</span><input type="range" class="sun-int horiz-fader int-fader" min="0" max="1" step="0.01" value="0.5" disabled /></div>
+            <div class="slider-row"><span class="param-label label-vol">VOLUME</span><input type="range" class="sun-vol horiz-fader vol-fader" min="0" max="1" step="0.01" value="0.5" disabled /></div>
+          </div>
+          <div class="channel-block">
+            <span class="channel-title">WIND</span>
+            <div class="slider-row"><span class="param-label label-int">INTENSITY</span><input type="range" class="wind-int horiz-fader int-fader" min="0" max="1" step="0.01" value="0.5" disabled /></div>
+            <div class="slider-row"><span class="param-label label-vol">VOLUME</span><input type="range" class="wind-vol horiz-fader vol-fader" min="0" max="1" step="0.01" value="0.5" disabled /></div>
+          </div>
+          <div class="channel-block">
+            <span class="channel-title">RAIN</span>
+            <div class="slider-row"><span class="param-label label-int">INTENSITY</span><input type="range" class="rain-int horiz-fader int-fader" min="0" max="1" step="0.01" value="0.5" disabled /></div>
+            <div class="slider-row"><span class="param-label label-vol">VOLUME</span><input type="range" class="rain-vol horiz-fader vol-fader" min="0" max="1" step="0.01" value="0.5" disabled /></div>
+          </div>
+          <div class="channel-block">
+            <span class="channel-title">CLOUD</span>
+            <div class="slider-row"><span class="param-label label-int">INTENSITY</span><input type="range" class="cloud-int horiz-fader int-fader" min="0" max="1" step="0.01" value="0.5" disabled /></div>
+            <div class="slider-row"><span class="param-label label-vol">VOLUME</span><input type="range" class="cloud-vol horiz-fader vol-fader" min="0" max="1" step="0.01" value="0.5" disabled /></div>
+          </div>
+          <div class="channel-block">
+            <span class="channel-title">HUMIDITY</span>
+            <div class="slider-row"><span class="param-label label-int">INTENSITY</span><input type="range" class="humid-int horiz-fader int-fader" min="0" max="1" step="0.01" value="0.5" disabled /></div>
+            <div class="slider-row"><span class="param-label label-vol">VOLUME</span><input type="range" class="humid-vol horiz-fader vol-fader" min="0" max="1" step="0.01" value="0.5" disabled /></div>
+          </div>
+          <div class="channel-block">
+            <span class="channel-title">TEMPERATURE</span>
+            <div class="slider-row"><span class="param-label label-int">INTENSITY</span><input type="range" class="temp-int horiz-fader int-fader" min="0" max="1" step="0.01" value="0.5" disabled /></div>
+            <div class="slider-row"><span class="param-label label-vol">VOLUME</span><input type="range" class="temp-vol horiz-fader vol-fader" min="0" max="1" step="0.01" value="0.5" disabled /></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- END OF RIGHT PANEL -->
+    
+    <!-- BOTTOM ROW: LCD TICKER DISPLAY -->
+    <div class="lcd-display">
+      <div id="weather-status" class="status-ticker">LIVE: OFFLINE</div>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
