@@ -4,7 +4,7 @@ let isEngineRunning = false;
 let currentLocationName = "OFFLINE";
 let wakeLock = null;
 
-// --- HARDWARE AUDIO GRAPH TIMING ENGINE ---
+// - HARDWARE AUDIO GRAPH TIMING ENGINE - //
 let clockNode = null;
 let clockDummyGain = null;
 let samplesPerTick = 0;
@@ -14,7 +14,6 @@ function initAudioClock() {
   const bufferSize = 4096;
   clockNode = audioCtx.createScriptProcessor(bufferSize, 1, 1);
   
-  // Mute dummy gain to eliminate clock buffer clicks
   clockDummyGain = audioCtx.createGain();
   clockDummyGain.gain.setValueAtTime(0, audioCtx.currentTime);
 
@@ -39,7 +38,7 @@ function updateClockInterval(bpm) {
   samplesPerTick = Math.floor(audioCtx.sampleRate * tickDurationSeconds);
 }
 
-// --- WAKE LOCK & BACKGROUND RESUME HANDLER ---
+// - WAKE LOCK & BACKGROUND RESUME HANDLER - //
 async function requestWakeLock() {
   try {
     if ('wakeLock' in navigator) {
@@ -57,7 +56,6 @@ function releaseWakeLock() {
 }
 
 document.addEventListener('visibilitychange', async () => {
-  // 1. App resumed: Restore audio if browser force-suspended it in the background
   if (!document.hidden && isEngineRunning && audioCtx) {
     if (audioCtx.state === 'suspended') {
       await audioCtx.resume();
@@ -68,7 +66,7 @@ document.addEventListener('visibilitychange', async () => {
   }
 });
 
-// - AUDIO CONSTANTS & START UP SYNTH STATE //
+// - AUDIO CONSTANTS & START UP SYNTH STATE - //
 
 const SCALE = [
   130.81, 146.83, 164.81, 196.00, 220.00,
@@ -167,7 +165,7 @@ function updateParameter(channelKey, type, value) {
   }
 }
 
-// - PRESET KEY //
+// - PRESET KEY - //
 
 function applyPreset(presetKey, presetData) {
   currentLocationName = presetKey;
@@ -185,7 +183,7 @@ function applyPreset(presetKey, presetData) {
   updateStatusDisplay(`PRESET: ${presetKey}`);
 }
 
-// - FETCH WEATHER COORDINATES //
+// - FETCH WEATHER COORDINATES - //
 
 async function fetchWeatherByCoords(lat, lon, label) {
   weatherStatus.innerText = `FETCHING LIVE WEATHER FOR ${label.toUpperCase()}...`;
@@ -214,7 +212,7 @@ async function fetchWeatherByCoords(lat, lon, label) {
   }
 }
 
-// - SEARCH CITY //
+// - SEARCH CITY - //
 
 async function searchCity(cityName) {
   if (!cityName.trim()) return;
@@ -233,7 +231,7 @@ async function searchCity(cityName) {
   }
 }
 
-// - UPDATE LCD TICKER //
+// - UPDATE LCD TICKER - //
 
 function updateStatusDisplay(prefix, timeLabel = null) {
   if (!weatherStatus) return;
@@ -260,7 +258,7 @@ function updateStatusDisplay(prefix, timeLabel = null) {
 
 // - GENERATIVE SYNTH INSTRUMENTS - PD TO JS//
 
-// - SUN / BELLS //
+// - SUN / BELLS - //
 
 function triggerSunBell(time) {
   if (paramValues.sun.volume < 0.02) return;
@@ -279,7 +277,7 @@ function triggerSunBell(time) {
   osc.start(time); osc.stop(time + 2.5);
 }
 
-// - RAIN / KICK //
+// - RAIN / KICK - //
 
 function playKick(time) {
   const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
@@ -290,7 +288,7 @@ function playKick(time) {
   osc.start(time); osc.stop(time + 0.2);
 }
 
-// - RAIN/ HIGH HAT //
+// - RAIN/ HIGH HAT - //
 
 function playHat(time) {
   const src = audioCtx.createBufferSource(); src.buffer = noiseBuffer;
@@ -302,7 +300,7 @@ function playHat(time) {
   src.start(time); src.stop(time + 0.05);
 }
 
-// - HUMIDITY / ARPEGGIATOR //
+// - HUMIDITY / ARPEGGIATOR - //
 
 function triggerHumidArp(time) {
   if (paramValues.humid.volume < 0.02) return;
@@ -326,7 +324,7 @@ function triggerHumidArp(time) {
   osc.start(time); osc.stop(time + decayTime + 0.05);
 }
 
-// - TICK CLOCK //
+// - TICK CLOCK - //
 
 function tickClock() {
   if (!isEngineRunning || !audioCtx) return;
@@ -350,7 +348,7 @@ function tickClock() {
   stepIndex = (stepIndex + 1) % 64;
 }
 
-// - MEDIA SESSION SETUP //
+// - MEDIA SESSION SETUP - //
 
 function setupMediaSession() {
   if ('mediaSession' in navigator) {
@@ -374,7 +372,7 @@ function setupMediaSession() {
   }
 }
 
-//  - POWER ON / ENGINE START //
+//  - POWER ON / ENGINE START - //
 
 async function startEngine() {
   if (navigator.audioSession) {
@@ -447,7 +445,7 @@ async function startEngine() {
   applyPreset('temperate', PRESETS.temperate);
 }
 
-//  - POWER OFF / ENGINE STOP //
+//  - POWER OFF / ENGINE STOP - //
 
 function stopEngine() {
   if (!audioCtx || !masterGain) return;
@@ -491,7 +489,7 @@ function stopEngine() {
   weatherStatus.innerText = "live: offline";
 }
 
-// - FAV BUTTONS //
+// - FAV BUTTONS - //
 
 function updateFavButtonStyles() {
   favBtns.forEach(btn => {
@@ -512,7 +510,7 @@ function clearFavorite(btnElement) {
   if (weatherStatus) weatherStatus.innerText = `RESET FAV ${slot}`;
 }
 
-// - CONTROLS LISTENERS //
+// - CONTROLS LISTENERS - //
 
 powerToggle.addEventListener('change', (e) => { e.target.checked ? startEngine() : stopEngine(); });
 btnSearch.addEventListener('click', () => searchCity(cityInput.value));
@@ -538,12 +536,12 @@ presetBtns.forEach(btn => {
   });
 });
 
-// - FAVORITE BUTTON EVENTS - CLICK, RIGHT CLICK, TOUCH LONG PRESS //
+// - FAVORITE BUTTON EVENTS - CLICK, RIGHT CLICK, TOUCH LONG PRESS - //
 
 favBtns.forEach(btn => {
   let touchTimer = null;
 
-  // - STANDARD CLICK - LOAD OR SAVE //
+  // - STANDARD CLICK - LOAD OR SAVE - //
   
   btn.addEventListener('click', () => {
     const slot = btn.getAttribute('data-slot');
@@ -589,14 +587,14 @@ favBtns.forEach(btn => {
     }
   });
 
-  // - DESKTOP - RIGHT CLICK RESET //
+  // - DESKTOP - RIGHT CLICK RESET - //
   
   btn.addEventListener('contextmenu', (e) => {
     e.preventDefault();
     clearFavorite(btn);
   });
 
-  // - MOBILE - LONG PRESS RESET 6s //
+  // - MOBILE - LONG PRESS RESET 6s - //
   
   btn.addEventListener('touchstart', () => {
     touchTimer = setTimeout(() => {
@@ -613,7 +611,7 @@ favBtns.forEach(btn => {
   });
 });
 
-// - RANDOM MODE BUTTON //
+// - RANDOM MODE BUTTON - //
 
 btnRandom.addEventListener('click', () => {
   currentLocationName = "RANDOM";
@@ -629,7 +627,7 @@ btnRandom.addEventListener('click', () => {
   updateStatusDisplay('RANDOM MODE');
 });
 
-// - RECORD AND EXPORT 30s BUTTON //
+// - RECORD AND EXPORT 30s BUTTON - //
 
 const exportBtn = document.getElementById('export-btn');
 
@@ -681,7 +679,7 @@ async function record30SecRealtimeWav() {
     if (exportBtn) exportBtn.disabled = false;
   };
 
-  // - LCD RECORDING COUNTDOWN //
+  // - LCD RECORDING COUNTDOWN - //
   
   mediaRecorder.start();
 
@@ -699,7 +697,7 @@ async function record30SecRealtimeWav() {
   }, 1000);
 }
 
-// - PCM WAV BINARY ENCODER UTILITIES //
+// - PCM WAV BINARY ENCODER UTILITIES - //
 
 function audioBufferToWavBlob(buffer) {
   const numChannels = buffer.numberOfChannels;
@@ -764,8 +762,8 @@ function writeString(view, offset, string) {
   }
 }
 
-// - SLIDER COLOURS AND FILL //
-// --- UPDATED SLIDER TRACK UTILITIES (HOISTED) ---
+// - SLIDER COLOURS AND FILL - //
+// -UPDATED SLIDER TRACK UTILITIES - //
 function updateSliderTrack(slider) {
   if (!slider) return;
   const min = slider.min ? parseFloat(slider.min) : 0;
@@ -784,7 +782,7 @@ function refreshAllSliderFills() {
   });
 }
 
-// --- DOM INITIALIZATION WRAPPER ---
+// - DOM INITIALIZATION WRAPPER - //
 document.addEventListener('DOMContentLoaded', () => {
   refreshAllSliderFills();
   document.querySelectorAll('input[type="range"]').forEach(slider => {
